@@ -1,7 +1,11 @@
 # RPG-console
 
-## Răducanu George-Cristian
-## Murică Andrei-Cristian
+## Authors:
+
+* Răducanu George-Cristian
+* Murică Andrei-Cristian
+
+## Short description
 
 A mini-RPG fun game written in C++.
 
