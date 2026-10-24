@@ -25,7 +25,7 @@ int App::run()
 
         if (choice == 1)
         {
-            ui_.showNotImplemented();
+            ui_.showClassMenu();
         }
         else if (choice == 2)
         {
