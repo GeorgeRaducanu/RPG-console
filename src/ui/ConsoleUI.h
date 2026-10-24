@@ -13,6 +13,7 @@ public:
     void showTitle() const;
     void showMainMenu() const;
     void showClassMenu() const;
+    void showClassSelected(const char* className) const;
     void showInvalidChoice() const;
     void showInputEnded() const;
     InputResult readChoice(int& choice) const;

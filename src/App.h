@@ -8,7 +8,15 @@ public:
     int run();
 
 private:
+    enum class PlayerClass
+    {
+        Warrior,
+        Mage,
+        Archer
+    };
+
     bool chooseClass();
 
+    PlayerClass playerClass_ = PlayerClass::Warrior;
     ConsoleUI ui_;
 };
