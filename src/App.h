@@ -5,7 +5,7 @@
 class App
 {
 public:
-    void run();
+    int run();
 
 private:
     ConsoleUI ui_;
