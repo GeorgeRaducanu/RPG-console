@@ -12,7 +12,7 @@ public:
 
     void showTitle() const;
     void showMainMenu() const;
-    void showNotImplemented() const;
+    void showClassMenu() const;
     void showInvalidChoice() const;
     void showInputEnded() const;
     InputResult readChoice(int& choice) const;

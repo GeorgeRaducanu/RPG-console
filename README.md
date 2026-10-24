@@ -14,3 +14,6 @@ It has 2 branches that are of interest:
 * `main_dp` for an ordered development with design patterns
 
 Differences in performance, modularity and ease of development will be documented and analyzed.
+
+For a short description of the game rules, see
+[docs/GAME_OVERVIEW.md](docs/GAME_OVERVIEW.md).

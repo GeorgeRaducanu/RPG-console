@@ -16,9 +16,13 @@ void ConsoleUI::showMainMenu() const
               << "Choose:" << '\n';
 }
 
-void ConsoleUI::showNotImplemented() const
+void ConsoleUI::showClassMenu() const
 {
-    std::cout << "New Game is not implemented yet." << '\n';
+    std::cout << "Choose your class:" << '\n'
+              << "1) Warrior (HP 120, ATK 15, DEF 8, MP 10)" << '\n'
+              << "2) Mage (HP 80, ATK 8, DEF 3, MP 50)" << '\n'
+              << "3) Archer (HP 95, ATK 12, DEF 5, MP 20)" << '\n'
+              << "Choose:" << '\n';
 }
 
 void ConsoleUI::showInvalidChoice() const
