@@ -25,7 +25,10 @@ int App::run()
 
         if (choice == 1)
         {
-            ui_.showClassMenu();
+            if (!chooseClass())
+            {
+                return 0;
+            }
         }
         else if (choice == 2)
         {
@@ -37,3 +40,28 @@ int App::run()
         }
     }
 }
+
+bool App::chooseClass()
+    {
+        while (true)
+        {
+            ui_.showClassMenu();
+
+            int choice = 0;
+            const ConsoleUI::InputResult result = ui_.readChoice(choice);
+            if (result == ConsoleUI::InputResult::EndOfInput)
+            {
+                ui_.showInputEnded();
+                return false;
+            }
+
+            if (result == ConsoleUI::InputResult::Invalid ||
+                choice < 1 || choice > 3)
+            {
+                ui_.showInvalidChoice();
+                continue;
+            }
+
+            return true;
+        }
+    }
