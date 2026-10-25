@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(rpg-console
     src/main.cpp
     src/App.cpp
+    src/core/Character.cpp
     src/ui/ConsoleUI.cpp
 )
 

@@ -44,6 +44,24 @@ void ConsoleUI::showExplorationMenu() const
             << "Choose:" << '\n';
 }
 
+void ConsoleUI::showStatus(
+    const char* playerClass,
+    const int hp,
+    const int maxHp,
+    const int mp,
+    const int maxMp,
+    const int attack,
+    const int defense,
+    const int xp,
+    const int xpNeeded) const
+{
+    output_ << "Hero (" << playerClass << ") Lv 1 | HP " << hp << '/'
+            << maxHp << " | MP " << mp << '/' << maxMp << " | ATK "
+            << attack << " | DEF " << defense << " | XP " << xp << '/'
+            << xpNeeded << '\n'
+            << "Effects: none" << '\n';
+}
+
 void ConsoleUI::showInvalidChoice() const
 {
     output_ << "Invalid choice." << '\n';

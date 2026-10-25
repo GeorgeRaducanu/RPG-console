@@ -19,6 +19,16 @@ public:
     void showClassMenu() const;
     void showClassSelected(const char* className) const;
     void showExplorationMenu() const;
+    void showStatus(
+        const char* playerClass,
+        int hp,
+        int maxHp,
+        int mp,
+        int maxMp,
+        int attack,
+        int defense,
+        int xp,
+        int xpNeeded) const;
     void showInvalidChoice() const;
     void showInputEnded() const;
     InputResult readChoice(int& choice) const;

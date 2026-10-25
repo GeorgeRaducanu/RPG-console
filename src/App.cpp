@@ -72,31 +72,17 @@ bool App::chooseClass()
         switch (choice)
         {
         case 1:
-            playerClass_ = PlayerClass::Warrior;
+            character_.setClass(Character::Class::Warrior);
             break;
         case 2:
-            playerClass_ = PlayerClass::Mage;
+            character_.setClass(Character::Class::Mage);
             break;
         case 3:
-            playerClass_ = PlayerClass::Archer;
+            character_.setClass(Character::Class::Archer);
             break;
         }
 
-        const char* className = "";
-        switch (playerClass_)
-        {
-        case PlayerClass::Warrior:
-            className = "Warrior";
-            break;
-        case PlayerClass::Mage:
-            className = "Mage";
-            break;
-        case PlayerClass::Archer:
-            className = "Archer";
-            break;
-        }
-
-        ui_.showClassSelected(className);
+        ui_.showClassSelected(character_.getClassName());
         return true;
     }
 }
@@ -126,11 +112,32 @@ bool App::runExploration()
             return true;
         }
 
-        if (choice == 1 || choice == 2 || choice == 3)
+        if (choice == 1 || choice == 2)
         {
+            continue;
+        }
+
+        if (choice == 3)
+        {
+            showStatus();
             continue;
         }
 
         ui_.showInvalidChoice();
     }
+}
+
+void App::showStatus() const
+{
+    const Stats& stats = character_.getStats();
+    ui_.showStatus(
+        character_.getClassName(),
+        stats.hp,
+        stats.maxHp,
+        stats.mp,
+        stats.maxMp,
+        stats.attack,
+        stats.defense,
+        0,
+        50);
 }
