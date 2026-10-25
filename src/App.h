@@ -16,6 +16,7 @@ private:
     };
 
     bool chooseClass();
+    bool runExploration();
 
     PlayerClass playerClass_ = PlayerClass::Warrior;
     ConsoleUI ui_;

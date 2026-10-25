@@ -14,6 +14,7 @@ public:
     void showMainMenu() const;
     void showClassMenu() const;
     void showClassSelected(const char* className) const;
+    void showExplorationMenu() const;
     void showInvalidChoice() const;
     void showInputEnded() const;
     InputResult readChoice(int& choice) const;
