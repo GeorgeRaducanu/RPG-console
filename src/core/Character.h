@@ -12,14 +12,8 @@ public:
         Archer
     };
 
-    Character();
-
-    void setClass(Class characterClass);
-    Class getClass() const;
-    const Stats& getStats() const;
-    const char* getClassName() const;
-
-private:
-    Class class_ = Class::Warrior;
-    Stats stats_{120, 120, 10, 10, 15, 8};
+    virtual ~Character() = default;
+    virtual Class getClass() const = 0;
+    virtual const Stats& getStats() const = 0;
+    virtual const char* getClassName() const = 0;
 };

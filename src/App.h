@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
 #include <iosfwd>
 
 #include "core/Character.h"
+#include "factory/CharacterFactory.h"
 #include "ui/ConsoleUI.h"
 
 class App
@@ -16,6 +18,7 @@ private:
     bool runExploration();
     void showStatus() const;
 
-    Character character_;
+    std::unique_ptr<CharacterFactory> characterFactory_;
+    std::unique_ptr<Character> character_;
     ConsoleUI ui_;
 };

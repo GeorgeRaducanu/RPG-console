@@ -1,5 +1,9 @@
 #include "App.h"
 
+#include "factory/ArcherFactory.h"
+#include "factory/MageFactory.h"
+#include "factory/WarriorFactory.h"
+
 App::App(std::istream& input, std::ostream& output)
     : ui_(input, output)
 {
@@ -72,17 +76,18 @@ bool App::chooseClass()
         switch (choice)
         {
         case 1:
-            character_.setClass(Character::Class::Warrior);
+            characterFactory_ = std::make_unique<WarriorFactory>();
             break;
         case 2:
-            character_.setClass(Character::Class::Mage);
+            characterFactory_ = std::make_unique<MageFactory>();
             break;
         case 3:
-            character_.setClass(Character::Class::Archer);
+            characterFactory_ = std::make_unique<ArcherFactory>();
             break;
         }
 
-        ui_.showClassSelected(character_.getClassName());
+        character_ = characterFactory_->create();
+        ui_.showClassSelected(character_->getClassName());
         return true;
     }
 }
@@ -129,9 +134,9 @@ bool App::runExploration()
 
 void App::showStatus() const
 {
-    const Stats& stats = character_.getStats();
+    const Stats& stats = character_->getStats();
     ui_.showStatus(
-        character_.getClassName(),
+        character_->getClassName(),
         stats.hp,
         stats.maxHp,
         stats.mp,

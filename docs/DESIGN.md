@@ -7,7 +7,7 @@
 
 ## Planned patterns
 
-- **Factory Method** — creează personaje, inamici și iteme.
+- **Factory Method** [x] — creează personaje, inamici și iteme.
 - **Strategy** — separă algoritmii de atac și skill-uri.
 - **Command** — reprezintă acțiunile jucătorului.
 - **State** — separă meniul, explorarea, lupta și finalul jocului.

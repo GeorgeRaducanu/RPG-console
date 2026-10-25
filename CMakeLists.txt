@@ -9,7 +9,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(rpg-console
     src/main.cpp
     src/App.cpp
-    src/core/Character.cpp
+    src/core/Archer.cpp
+    src/core/Mage.cpp
+    src/core/Warrior.cpp
+    src/factory/ArcherFactory.cpp
+    src/factory/MageFactory.cpp
+    src/factory/WarriorFactory.cpp
     src/ui/ConsoleUI.cpp
 )
 
