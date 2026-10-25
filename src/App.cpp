@@ -27,6 +27,10 @@ int App::run()
             {
                 return 0;
             }
+            if (!runExploration())
+            {
+                return 0;
+            }
         }
         else if (choice == 2)
         {
@@ -89,5 +93,39 @@ bool App::chooseClass()
 
         ui_.showClassSelected(className);
         return true;
+    }
+}
+
+bool App::runExploration()
+{
+    while (true)
+    {
+        ui_.showExplorationMenu();
+
+        int choice = 0;
+        const ConsoleUI::InputResult result = ui_.readChoice(choice);
+        if (result == ConsoleUI::InputResult::EndOfInput)
+        {
+            ui_.showInputEnded();
+            return false;
+        }
+
+        if (result == ConsoleUI::InputResult::Invalid)
+        {
+            ui_.showInvalidChoice();
+            continue;
+        }
+
+        if (choice == 4)
+        {
+            return true;
+        }
+
+        if (choice == 1 || choice == 2 || choice == 3)
+        {
+            continue;
+        }
+
+        ui_.showInvalidChoice();
     }
 }

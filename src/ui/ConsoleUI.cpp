@@ -30,6 +30,15 @@ void ConsoleUI::showClassSelected(const char* className) const
     std::cout << "You chose " << className << "." << '\n';
 }
 
+void ConsoleUI::showExplorationMenu() const
+{
+    std::cout << "1) Advance" << '\n'
+              << "2) Inventory" << '\n'
+              << "3) Status" << '\n'
+              << "4) Quit" << '\n'
+              << "Choose:" << '\n';
+}
+
 void ConsoleUI::showInvalidChoice() const
 {
     std::cout << "Invalid choice." << '\n';
