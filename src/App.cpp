@@ -121,11 +121,33 @@ bool App::runExploration()
             return true;
         }
 
-        if (choice == 1 || choice == 2 || choice == 3)
+        if (choice == 1 || choice == 2)
         {
             continue;
         }
 
+        if (choice == 3)
+        {
+            showStatus();
+            continue;
+        }
+
         ui_.showInvalidChoice();
+    }
+}
+
+void App::showStatus() const
+{
+    switch (playerClass_)
+    {
+    case PlayerClass::Warrior:
+        ui_.showStatus("Warrior", 120, 120, 10, 10, 15, 8, 0, 50);
+        break;
+    case PlayerClass::Mage:
+        ui_.showStatus("Mage", 80, 80, 50, 50, 8, 3, 0, 50);
+        break;
+    case PlayerClass::Archer:
+        ui_.showStatus("Archer", 95, 95, 20, 20, 12, 5, 0, 50);
+        break;
     }
 }

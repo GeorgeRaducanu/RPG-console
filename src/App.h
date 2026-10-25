@@ -17,6 +17,7 @@ private:
 
     bool chooseClass();
     bool runExploration();
+    void showStatus() const;
 
     PlayerClass playerClass_ = PlayerClass::Warrior;
     ConsoleUI ui_;
