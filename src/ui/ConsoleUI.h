@@ -1,8 +1,12 @@
 #pragma once
 
+#include <iosfwd>
+
 class ConsoleUI
 {
 public:
+    ConsoleUI(std::istream& input, std::ostream& output);
+
     enum class InputResult
     {
         Valid,
@@ -18,4 +22,8 @@ public:
     void showInvalidChoice() const;
     void showInputEnded() const;
     InputResult readChoice(int& choice) const;
+
+private:
+    std::istream& input_;
+    std::ostream& output_;
 };

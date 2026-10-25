@@ -1,5 +1,10 @@
 #include "App.h"
 
+App::App(std::istream& input, std::ostream& output)
+    : ui_(input, output)
+{
+}
+
 int App::run()
 {
     ui_.showTitle();

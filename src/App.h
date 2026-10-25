@@ -1,10 +1,13 @@
 #pragma once
 
+#include <iosfwd>
+
 #include "ui/ConsoleUI.h"
 
 class App
 {
 public:
+    App(std::istream& input, std::ostream& output);
     int run();
 
 private:
