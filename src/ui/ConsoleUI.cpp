@@ -44,6 +44,26 @@ void ConsoleUI::showExplorationMenu() const
             << "Choose:" << '\n';
 }
 
+void ConsoleUI::showRoom(const int room) const
+{
+    output_ << "--- Room " << room << "/8 ---" << '\n';
+}
+
+void ConsoleUI::showEnemyAppeared(const char* enemy, const int hp) const
+{
+    output_ << "A " << enemy << " appears! (HP " << hp << ")" << '\n';
+}
+
+void ConsoleUI::showEmptyRoom() const
+{
+    output_ << "The room is empty." << '\n';
+}
+
+void ConsoleUI::showItemFound(const char* item) const
+{
+    output_ << "You found a " << item << "." << '\n';
+}
+
 void ConsoleUI::showStatus(
     const char* playerClass,
     const int hp,

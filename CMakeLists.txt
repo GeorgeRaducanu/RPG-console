@@ -10,10 +10,16 @@ add_executable(rpg-console
     src/main.cpp
     src/App.cpp
     src/core/Archer.cpp
+    src/core/Dragon.cpp
+    src/core/Goblin.cpp
     src/core/Mage.cpp
+    src/core/Orc.cpp
     src/core/Warrior.cpp
     src/factory/ArcherFactory.cpp
+    src/factory/DragonFactory.cpp
+    src/factory/GoblinFactory.cpp
     src/factory/MageFactory.cpp
+    src/factory/OrcFactory.cpp
     src/factory/WarriorFactory.cpp
     src/ui/ConsoleUI.cpp
 )

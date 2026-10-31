@@ -1,7 +1,10 @@
 #include "App.h"
 
 #include "factory/ArcherFactory.h"
+#include "factory/DragonFactory.h"
+#include "factory/GoblinFactory.h"
 #include "factory/MageFactory.h"
+#include "factory/OrcFactory.h"
 #include "factory/WarriorFactory.h"
 
 App::App(std::istream& input, std::ostream& output)
@@ -86,6 +89,8 @@ bool App::chooseClass()
             break;
         }
 
+        room_ = 0;
+        enemy_.reset();
         character_ = characterFactory_->create();
         ui_.showClassSelected(character_->getClassName());
         return true;
@@ -117,7 +122,13 @@ bool App::runExploration()
             return true;
         }
 
-        if (choice == 1 || choice == 2)
+        if (choice == 1)
+        {
+            advanceRoom();
+            continue;
+        }
+
+        if (choice == 2)
         {
             continue;
         }
@@ -130,6 +141,56 @@ bool App::runExploration()
 
         ui_.showInvalidChoice();
     }
+}
+
+void App::advanceRoom()
+{
+    if (room_ >= totalRooms_)
+    {
+        return;
+    }
+
+    ++room_;
+    ui_.showRoom(room_);
+
+    switch (room_)
+    {
+    case 1:
+    {
+        GoblinFactory factory;
+        enemy_ = factory.create();
+        break;
+    }
+    case 2:
+        ui_.showEmptyRoom();
+        return;
+    case 3:
+        ui_.showItemFound("Potion");
+        return;
+    case 4:
+    {
+        OrcFactory factory;
+        enemy_ = factory.create();
+        break;
+    }
+    case 5:
+        ui_.showItemFound("Sword");
+        return;
+    case 6:
+        ui_.showEmptyRoom();
+        return;
+    case 7:
+        ui_.showItemFound("Elixir");
+        return;
+    case 8:
+    {
+        DragonFactory factory;
+        enemy_ = factory.create();
+        break;
+    }
+    }
+
+    ui_.showEnemyAppeared(enemy_->getName(), enemy_->getHp());
 }
 
 void App::showStatus() const
