@@ -15,6 +15,10 @@ public:
     void showClassMenu() const;
     void showClassSelected(const char* className) const;
     void showExplorationMenu() const;
+    void showRoom(int room) const;
+    void showEnemyAppeared(const char* enemy, int hp) const;
+    void showEmptyRoom() const;
+    void showItemFound(const char* item) const;
     void showStatus(
         const char* playerClass,
         int hp,

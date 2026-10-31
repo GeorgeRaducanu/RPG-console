@@ -91,6 +91,7 @@ bool App::chooseClass()
             break;
         }
 
+        room_ = 0;
         ui_.showClassSelected(className);
         return true;
     }
@@ -121,7 +122,13 @@ bool App::runExploration()
             return true;
         }
 
-        if (choice == 1 || choice == 2)
+        if (choice == 1)
+        {
+            advanceRoom();
+            continue;
+        }
+
+        if (choice == 2)
         {
             continue;
         }
@@ -133,6 +140,45 @@ bool App::runExploration()
         }
 
         ui_.showInvalidChoice();
+    }
+}
+
+void App::advanceRoom()
+{
+    if (room_ >= totalRooms_)
+    {
+        return;
+    }
+
+    ++room_;
+    ui_.showRoom(room_);
+
+    switch (room_)
+    {
+    case 1:
+        ui_.showEnemyAppeared("Goblin", 40);
+        break;
+    case 2:
+        ui_.showEmptyRoom();
+        break;
+    case 3:
+        ui_.showItemFound("Potion");
+        break;
+    case 4:
+        ui_.showEnemyAppeared("Orc", 80);
+        break;
+    case 5:
+        ui_.showItemFound("Sword");
+        break;
+    case 6:
+        ui_.showEmptyRoom();
+        break;
+    case 7:
+        ui_.showItemFound("Elixir");
+        break;
+    case 8:
+        ui_.showEnemyAppeared("Dragon", 120);
+        break;
     }
 }
 

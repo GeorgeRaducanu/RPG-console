@@ -8,6 +8,8 @@ public:
     int run();
 
 private:
+    static constexpr int totalRooms_ = 8;
+
     enum class PlayerClass
     {
         Warrior,
@@ -18,7 +20,9 @@ private:
     bool chooseClass();
     bool runExploration();
     void showStatus() const;
+    void advanceRoom();
 
     PlayerClass playerClass_ = PlayerClass::Warrior;
+    int room_ = 0;
     ConsoleUI ui_;
 };
