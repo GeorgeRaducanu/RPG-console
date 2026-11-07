@@ -35,8 +35,28 @@ void ConsoleUI::showExplorationMenu() const
     std::cout << "1) Advance" << '\n'
               << "2) Inventory" << '\n'
               << "3) Status" << '\n'
-              << "4) Quit" << '\n'
+    << "4) Quit" << '\n'
+    << "5) Attack" << '\n'
               << "Choose:" << '\n';
+}
+
+void ConsoleUI::showNoEnemy() const
+{
+    std::cout << "There is no enemy here." << '\n';
+}
+
+void ConsoleUI::showAttack(
+    const char* enemy,
+    const int damage,
+    const int remainingHp) const
+{
+    std::cout << "You attack the " << enemy << " for " << damage
+              << " damage. (HP " << remainingHp << ")" << '\n';
+}
+
+void ConsoleUI::showEnemyDefeated(const char* enemy) const
+{
+    std::cout << enemy << " defeated!" << '\n';
 }
 
 void ConsoleUI::showRoom(const int room) const
@@ -57,6 +77,21 @@ void ConsoleUI::showEmptyRoom() const
 void ConsoleUI::showItemFound(const char* item) const
 {
     std::cout << "You found a " << item << "." << '\n';
+}
+
+void ConsoleUI::showInventory(const std::vector<std::string>& items) const
+{
+    std::cout << "Inventory:" << '\n';
+    if (items.empty())
+    {
+        std::cout << "  (empty)" << '\n';
+        return;
+    }
+
+    for (const std::string& item : items)
+    {
+        std::cout << "- " << item << '\n';
+    }
 }
 
 void ConsoleUI::showStatus(

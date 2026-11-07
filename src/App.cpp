@@ -92,6 +92,9 @@ bool App::chooseClass()
         }
 
         room_ = 0;
+        inventory_.clear();
+        enemyName_ = nullptr;
+        enemyHp_ = 0;
         ui_.showClassSelected(className);
         return true;
     }
@@ -130,12 +133,19 @@ bool App::runExploration()
 
         if (choice == 2)
         {
+            showInventory();
             continue;
         }
 
         if (choice == 3)
         {
             showStatus();
+            continue;
+        }
+
+        if (choice == 5)
+        {
+            attackEnemy();
             continue;
         }
 
@@ -151,34 +161,85 @@ void App::advanceRoom()
     }
 
     ++room_;
+    enemyName_ = nullptr;
+    enemyHp_ = 0;
     ui_.showRoom(room_);
 
     switch (room_)
     {
     case 1:
+        enemyName_ = "Goblin";
+        enemyHp_ = 40;
         ui_.showEnemyAppeared("Goblin", 40);
         break;
     case 2:
         ui_.showEmptyRoom();
         break;
     case 3:
+        inventory_.push_back("Potion");
         ui_.showItemFound("Potion");
         break;
     case 4:
+        enemyName_ = "Orc";
+        enemyHp_ = 80;
         ui_.showEnemyAppeared("Orc", 80);
         break;
     case 5:
+        inventory_.push_back("Sword");
         ui_.showItemFound("Sword");
         break;
     case 6:
         ui_.showEmptyRoom();
         break;
     case 7:
+        inventory_.push_back("Elixir");
         ui_.showItemFound("Elixir");
         break;
     case 8:
+        enemyName_ = "Dragon";
+        enemyHp_ = 120;
         ui_.showEnemyAppeared("Dragon", 120);
         break;
+    }
+}
+
+void App::showInventory() const
+{
+    ui_.showInventory(inventory_);
+}
+
+void App::attackEnemy()
+{
+    if (enemyName_ == nullptr || enemyHp_ <= 0)
+    {
+        ui_.showNoEnemy();
+        return;
+    }
+
+    int damage = 0;
+    switch (playerClass_)
+    {
+    case PlayerClass::Warrior:
+        damage = 15;
+        break;
+    case PlayerClass::Mage:
+        damage = 10;
+        break;
+    case PlayerClass::Archer:
+        damage = 13;
+        break;
+    }
+
+    enemyHp_ -= damage;
+    if (enemyHp_ < 0)
+    {
+        enemyHp_ = 0;
+    }
+    ui_.showAttack(enemyName_, damage, enemyHp_);
+    if (enemyHp_ <= 0)
+    {
+        ui_.showEnemyDefeated(enemyName_);
+        enemyName_ = nullptr;
     }
 }
 

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "ui/ConsoleUI.h"
 
 class App
@@ -20,9 +23,14 @@ private:
     bool chooseClass();
     bool runExploration();
     void showStatus() const;
+    void showInventory() const;
+    void attackEnemy();
     void advanceRoom();
 
     PlayerClass playerClass_ = PlayerClass::Warrior;
     int room_ = 0;
+    std::vector<std::string> inventory_;
+    const char* enemyName_ = nullptr;
+    int enemyHp_ = 0;
     ConsoleUI ui_;
 };
