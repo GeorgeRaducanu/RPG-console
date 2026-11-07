@@ -1,4 +1,4 @@
-#include "factory/DragonFactory.h"
+#include "factory/enemy/DragonFactory.h"
 
 #include "core/Dragon.h"
 

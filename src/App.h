@@ -5,7 +5,9 @@
 
 #include "core/Character.h"
 #include "core/Enemy.h"
-#include "factory/CharacterFactory.h"
+#include "core/Inventory.h"
+#include "combat/AttackStrategy.h"
+#include "factory/character/CharacterFactory.h"
 #include "ui/ConsoleUI.h"
 
 class App
@@ -20,11 +22,15 @@ private:
     bool chooseClass();
     bool runExploration();
     void showStatus() const;
+    void showInventory() const;
+    void attackEnemy();
     void advanceRoom();
 
     int room_ = 0;
     std::unique_ptr<CharacterFactory> characterFactory_;
     std::unique_ptr<Character> character_;
     std::unique_ptr<Enemy> enemy_;
+    std::unique_ptr<AttackStrategy> attackStrategy_;
+    Inventory inventory_;
     ConsoleUI ui_;
 };

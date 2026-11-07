@@ -1,0 +1,9 @@
+#pragma once
+
+#include "combat/AttackStrategy.h"
+
+class RangedAttackStrategy : public AttackStrategy
+{
+public:
+    int calculateDamage(const Stats& stats) const override;
+};

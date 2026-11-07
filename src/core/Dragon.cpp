@@ -7,5 +7,19 @@ const char* Dragon::getName() const
 
 int Dragon::getHp() const
 {
-    return 120;
+    return hp_;
+}
+
+void Dragon::takeDamage(const int damage)
+{
+    hp_ -= damage;
+    if (hp_ < 0)
+    {
+        hp_ = 0;
+    }
+}
+
+bool Dragon::isAlive() const
+{
+    return hp_ > 0;
 }

@@ -1,4 +1,4 @@
-#include "factory/OrcFactory.h"
+#include "factory/enemy/OrcFactory.h"
 
 #include "core/Orc.h"
 

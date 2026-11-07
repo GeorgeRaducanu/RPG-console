@@ -1,6 +1,6 @@
 #pragma once
 
-#include "factory/CharacterFactory.h"
+#include "factory/character/CharacterFactory.h"
 
 class ArcherFactory : public CharacterFactory
 {

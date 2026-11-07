@@ -1,4 +1,4 @@
-#include "factory/ArcherFactory.h"
+#include "factory/character/ArcherFactory.h"
 
 #include "core/Archer.h"
 

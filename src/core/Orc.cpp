@@ -7,5 +7,19 @@ const char* Orc::getName() const
 
 int Orc::getHp() const
 {
-    return 80;
+    return hp_;
+}
+
+void Orc::takeDamage(const int damage)
+{
+    hp_ -= damage;
+    if (hp_ < 0)
+    {
+        hp_ = 0;
+    }
+}
+
+bool Orc::isAlive() const
+{
+    return hp_ > 0;
 }

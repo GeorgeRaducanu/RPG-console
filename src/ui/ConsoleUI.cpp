@@ -40,8 +40,28 @@ void ConsoleUI::showExplorationMenu() const
     output_ << "1) Advance" << '\n'
             << "2) Inventory" << '\n'
             << "3) Status" << '\n'
-            << "4) Quit" << '\n'
+    << "4) Quit" << '\n'
+    << "5) Attack" << '\n'
             << "Choose:" << '\n';
+}
+
+void ConsoleUI::showNoEnemy() const
+{
+    output_ << "There is no enemy here." << '\n';
+}
+
+void ConsoleUI::showAttack(
+    const char* enemy,
+    const int damage,
+    const int remainingHp) const
+{
+    output_ << "You attack the " << enemy << " for " << damage
+            << " damage. (HP " << remainingHp << ")" << '\n';
+}
+
+void ConsoleUI::showEnemyDefeated(const char* enemy) const
+{
+    output_ << enemy << " defeated!" << '\n';
 }
 
 void ConsoleUI::showRoom(const int room) const
@@ -62,6 +82,21 @@ void ConsoleUI::showEmptyRoom() const
 void ConsoleUI::showItemFound(const char* item) const
 {
     output_ << "You found a " << item << "." << '\n';
+}
+
+void ConsoleUI::showInventory(const std::vector<std::string>& items) const
+{
+    output_ << "Inventory:" << '\n';
+    if (items.empty())
+    {
+        output_ << "  (empty)" << '\n';
+        return;
+    }
+
+    for (const std::string& item : items)
+    {
+        output_ << "- " << item << '\n';
+    }
 }
 
 void ConsoleUI::showStatus(

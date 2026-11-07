@@ -1,4 +1,4 @@
-#include "factory/WarriorFactory.h"
+#include "factory/character/WarriorFactory.h"
 
 #include "core/Warrior.h"
 

@@ -1,4 +1,4 @@
-#include "factory/GoblinFactory.h"
+#include "factory/enemy/GoblinFactory.h"
 
 #include "core/Goblin.h"
 

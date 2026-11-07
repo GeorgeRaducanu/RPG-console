@@ -5,10 +5,10 @@
 - **Dependency Injection** — `App` primește `std::istream` și `std::ostream`
   și le transmite către `ConsoleUI`. Permite testarea fără consola reală. (not DP)
 
-## Planned patterns
+## Patterns
 
-- **Factory Method** [x] — fabrici concrete creează personaje și inamici concreți.
-- **Strategy** — separă algoritmii de atac și skill-uri.
+- **Factory Method** [x] — fabrici concrete creează personaje, inamici și iteme.
+- **Strategy** [x] — selectează algoritmul de atac pentru Warrior, Mage și Archer.
 - **Command** — reprezintă acțiunile jucătorului.
 - **State** — separă meniul, explorarea, lupta și finalul jocului.
 - **Observer** — transmite evenimente precum damage, moarte și level-up.

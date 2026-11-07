@@ -1,6 +1,6 @@
 #pragma once
 
-#include "factory/EnemyFactory.h"
+#include "factory/enemy/EnemyFactory.h"
 
 class GoblinFactory : public EnemyFactory
 {

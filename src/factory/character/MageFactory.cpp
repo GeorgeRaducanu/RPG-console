@@ -1,4 +1,4 @@
-#include "factory/MageFactory.h"
+#include "factory/character/MageFactory.h"
 
 #include "core/Mage.h"
 
