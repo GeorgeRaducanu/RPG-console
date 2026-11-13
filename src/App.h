@@ -25,6 +25,7 @@ private:
     void showStatus() const;
     void showInventory() const;
     void attackEnemy();
+    void useItem();
     void advanceRoom();
 
     PlayerClass playerClass_ = PlayerClass::Warrior;
@@ -32,5 +33,9 @@ private:
     std::vector<std::string> inventory_;
     const char* enemyName_ = nullptr;
     int enemyHp_ = 0;
+    int enemyAttack_ = 0;
+    int hp_ = 0;
+    int maxHp_ = 0;
+    bool defeated_ = false;
     ConsoleUI ui_;
 };

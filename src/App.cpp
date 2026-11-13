@@ -1,5 +1,7 @@
 #include "App.h"
 
+#include <algorithm>
+
 int App::run()
 {
     ui_.showTitle();
@@ -82,12 +84,15 @@ bool App::chooseClass()
         {
         case PlayerClass::Warrior:
             className = "Warrior";
+            hp_ = maxHp_ = 120;
             break;
         case PlayerClass::Mage:
             className = "Mage";
+            hp_ = maxHp_ = 80;
             break;
         case PlayerClass::Archer:
             className = "Archer";
+            hp_ = maxHp_ = 95;
             break;
         }
 
@@ -95,6 +100,8 @@ bool App::chooseClass()
         inventory_.clear();
         enemyName_ = nullptr;
         enemyHp_ = 0;
+        enemyAttack_ = 0;
+        defeated_ = false;
         ui_.showClassSelected(className);
         return true;
     }
@@ -149,6 +156,12 @@ bool App::runExploration()
             continue;
         }
 
+        if (choice == 6)
+        {
+            useItem();
+            continue;
+        }
+
         ui_.showInvalidChoice();
     }
 }
@@ -170,6 +183,7 @@ void App::advanceRoom()
     case 1:
         enemyName_ = "Goblin";
         enemyHp_ = 40;
+        enemyAttack_ = 5;
         ui_.showEnemyAppeared("Goblin", 40);
         break;
     case 2:
@@ -182,6 +196,7 @@ void App::advanceRoom()
     case 4:
         enemyName_ = "Orc";
         enemyHp_ = 80;
+        enemyAttack_ = 8;
         ui_.showEnemyAppeared("Orc", 80);
         break;
     case 5:
@@ -198,6 +213,7 @@ void App::advanceRoom()
     case 8:
         enemyName_ = "Dragon";
         enemyHp_ = 120;
+        enemyAttack_ = 12;
         ui_.showEnemyAppeared("Dragon", 120);
         break;
     }
@@ -210,6 +226,12 @@ void App::showInventory() const
 
 void App::attackEnemy()
 {
+    if (defeated_)
+    {
+        ui_.showPlayerDefeated();
+        return;
+    }
+
     if (enemyName_ == nullptr || enemyHp_ <= 0)
     {
         ui_.showNoEnemy();
@@ -240,7 +262,47 @@ void App::attackEnemy()
     {
         ui_.showEnemyDefeated(enemyName_);
         enemyName_ = nullptr;
+        enemyAttack_ = 0;
+        return;
     }
+
+    hp_ -= enemyAttack_;
+    if (hp_ < 0)
+    {
+        hp_ = 0;
+    }
+    ui_.showEnemyAttack(enemyName_, enemyAttack_, hp_);
+    if (hp_ == 0)
+    {
+        defeated_ = true;
+        ui_.showPlayerDefeated();
+    }
+}
+
+void App::useItem()
+{
+    if (defeated_)
+    {
+        ui_.showPlayerDefeated();
+        return;
+    }
+
+    auto potion = std::find(inventory_.begin(), inventory_.end(), "Potion");
+    if (potion == inventory_.end())
+    {
+        ui_.showNoItem("Potion");
+        return;
+    }
+    if (hp_ == maxHp_)
+    {
+        ui_.showItemAtFullHealth();
+        return;
+    }
+
+    const int oldHp = hp_;
+    hp_ = std::min(maxHp_, hp_ + 30);
+    inventory_.erase(potion);
+    ui_.showItemUsed("Potion", hp_ - oldHp, hp_);
 }
 
 void App::showStatus() const
@@ -248,13 +310,13 @@ void App::showStatus() const
     switch (playerClass_)
     {
     case PlayerClass::Warrior:
-        ui_.showStatus("Warrior", 120, 120, 10, 10, 15, 8, 0, 50);
+        ui_.showStatus("Warrior", hp_, 120, 10, 10, 15, 8, 0, 50);
         break;
     case PlayerClass::Mage:
-        ui_.showStatus("Mage", 80, 80, 50, 50, 8, 3, 0, 50);
+        ui_.showStatus("Mage", hp_, 80, 50, 50, 8, 3, 0, 50);
         break;
     case PlayerClass::Archer:
-        ui_.showStatus("Archer", 95, 95, 20, 20, 12, 5, 0, 50);
+        ui_.showStatus("Archer", hp_, 95, 20, 20, 12, 5, 0, 50);
         break;
     }
 }

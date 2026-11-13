@@ -21,6 +21,11 @@ public:
     void showNoEnemy() const;
     void showAttack(const char* enemy, int damage, int remainingHp) const;
     void showEnemyDefeated(const char* enemy) const;
+    void showEnemyAttack(const char* enemy, int damage, int remainingHp) const;
+    void showPlayerDefeated() const;
+    void showNoItem(const char* item) const;
+    void showItemAtFullHealth() const;
+    void showItemUsed(const char* item, int healed, int hp) const;
     void showRoom(int room) const;
     void showEnemyAppeared(const char* enemy, int hp) const;
     void showEmptyRoom() const;
