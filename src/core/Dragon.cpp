@@ -10,6 +10,11 @@ int Dragon::getHp() const
     return hp_;
 }
 
+int Dragon::getAttack() const
+{
+    return 12;
+}
+
 void Dragon::takeDamage(const int damage)
 {
     hp_ -= damage;

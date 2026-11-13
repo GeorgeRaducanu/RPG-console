@@ -42,6 +42,7 @@ void ConsoleUI::showExplorationMenu() const
             << "3) Status" << '\n'
     << "4) Quit" << '\n'
     << "5) Attack" << '\n'
+    << "6) Use Item" << '\n'
             << "Choose:" << '\n';
 }
 
@@ -62,6 +63,33 @@ void ConsoleUI::showAttack(
 void ConsoleUI::showEnemyDefeated(const char* enemy) const
 {
     output_ << enemy << " defeated!" << '\n';
+}
+
+void ConsoleUI::showEnemyAttack(const char* enemy, const int damage, const int remainingHp) const
+{
+    output_ << "The " << enemy << " hits you for " << damage
+            << " damage. (HP " << remainingHp << ")" << '\n';
+}
+
+void ConsoleUI::showPlayerDefeated() const
+{
+    output_ << "You were defeated." << '\n';
+}
+
+void ConsoleUI::showNoItem(const char* item) const
+{
+    output_ << "You have no " << item << "." << '\n';
+}
+
+void ConsoleUI::showItemAtFullHealth() const
+{
+    output_ << "You are already at full HP." << '\n';
+}
+
+void ConsoleUI::showItemUsed(const char* item, const int healed, const int hp) const
+{
+    output_ << "You used a " << item << " and restored " << healed
+            << " HP. (HP " << hp << ")" << '\n';
 }
 
 void ConsoleUI::showRoom(const int room) const

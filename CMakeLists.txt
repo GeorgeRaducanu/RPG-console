@@ -9,6 +9,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(rpg-console
     src/main.cpp
     src/App.cpp
+    src/combat/AttackCommand.cpp
+    src/combat/AttackReceiver.cpp
+    src/combat/UseItemCommand.cpp
+    src/combat/UseItemReceiver.cpp
     src/combat/MagicAttackStrategy.cpp
     src/combat/MeleeAttackStrategy.cpp
     src/combat/RangedAttackStrategy.cpp

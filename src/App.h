@@ -6,7 +6,10 @@
 #include "core/Character.h"
 #include "core/Enemy.h"
 #include "core/Inventory.h"
+#include "combat/AttackReceiver.h"
+#include "combat/Command.h"
 #include "combat/AttackStrategy.h"
+#include "combat/UseItemReceiver.h"
 #include "factory/character/CharacterFactory.h"
 #include "ui/ConsoleUI.h"
 
@@ -23,7 +26,6 @@ private:
     bool runExploration();
     void showStatus() const;
     void showInventory() const;
-    void attackEnemy();
     void advanceRoom();
 
     int room_ = 0;
@@ -32,5 +34,12 @@ private:
     std::unique_ptr<Enemy> enemy_;
     std::unique_ptr<AttackStrategy> attackStrategy_;
     Inventory inventory_;
+    int hp_ = 0;
+    int maxHp_ = 0;
+    bool defeated_ = false;
     ConsoleUI ui_;
+    AttackReceiver attackReceiver_;
+    std::unique_ptr<Command> attackCommand_;
+    UseItemReceiver useItemReceiver_;
+    std::unique_ptr<Command> useItemCommand_;
 };

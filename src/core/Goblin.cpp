@@ -10,6 +10,11 @@ int Goblin::getHp() const
     return hp_;
 }
 
+int Goblin::getAttack() const
+{
+    return 5;
+}
+
 void Goblin::takeDamage(const int damage)
 {
     hp_ -= damage;

@@ -12,9 +12,15 @@
 #include "combat/MagicAttackStrategy.h"
 #include "combat/MeleeAttackStrategy.h"
 #include "combat/RangedAttackStrategy.h"
+#include "combat/AttackCommand.h"
+#include "combat/UseItemCommand.h"
 
 App::App(std::istream& input, std::ostream& output)
-    : ui_(input, output)
+    : ui_(input, output),
+      attackReceiver_(enemy_, character_, attackStrategy_, hp_, defeated_, ui_),
+      attackCommand_(std::make_unique<AttackCommand>(attackReceiver_)),
+      useItemReceiver_(inventory_, hp_, maxHp_, defeated_, ui_),
+      useItemCommand_(std::make_unique<UseItemCommand>(useItemReceiver_))
 {
 }
 
@@ -87,20 +93,24 @@ bool App::chooseClass()
         case 1:
             characterFactory_ = std::make_unique<WarriorFactory>();
             attackStrategy_ = std::make_unique<MeleeAttackStrategy>();
+            maxHp_ = hp_ = 120;
             break;
         case 2:
             characterFactory_ = std::make_unique<MageFactory>();
             attackStrategy_ = std::make_unique<MagicAttackStrategy>();
+            maxHp_ = hp_ = 80;
             break;
         case 3:
             characterFactory_ = std::make_unique<ArcherFactory>();
             attackStrategy_ = std::make_unique<RangedAttackStrategy>();
+            maxHp_ = hp_ = 95;
             break;
         }
 
         room_ = 0;
         enemy_.reset();
         inventory_.clear();
+        defeated_ = false;
         character_ = characterFactory_->create();
         ui_.showClassSelected(character_->getClassName());
         return true;
@@ -152,7 +162,13 @@ bool App::runExploration()
 
         if (choice == 5)
         {
-            attackEnemy();
+            attackCommand_->execute();
+            continue;
+        }
+
+        if (choice == 6)
+        {
+            useItemCommand_->execute();
             continue;
         }
 
@@ -228,30 +244,12 @@ void App::showInventory() const
     ui_.showInventory(inventory_.getNames());
 }
 
-void App::attackEnemy()
-{
-    if (!enemy_ || !enemy_->isAlive())
-    {
-        ui_.showNoEnemy();
-        return;
-    }
-
-    const int damage = attackStrategy_->calculateDamage(character_->getStats());
-    enemy_->takeDamage(damage);
-    ui_.showAttack(enemy_->getName(), damage, enemy_->getHp());
-    if (!enemy_->isAlive())
-    {
-        ui_.showEnemyDefeated(enemy_->getName());
-        enemy_.reset();
-    }
-}
-
 void App::showStatus() const
 {
     const Stats& stats = character_->getStats();
     ui_.showStatus(
         character_->getClassName(),
-        stats.hp,
+        hp_,
         stats.maxHp,
         stats.mp,
         stats.maxMp,

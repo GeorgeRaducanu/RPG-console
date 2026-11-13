@@ -10,6 +10,11 @@ int Orc::getHp() const
     return hp_;
 }
 
+int Orc::getAttack() const
+{
+    return 8;
+}
+
 void Orc::takeDamage(const int damage)
 {
     hp_ -= damage;
