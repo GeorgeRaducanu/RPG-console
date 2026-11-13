@@ -15,3 +15,15 @@
 - **State** — separă meniul, explorarea, lupta și finalul jocului.
 - **Observer** — transmite evenimente precum damage, moarte și level-up.
 - **Decorator** — adaugă efecte precum Poison și Buff.
+
+---
+
+## Progress checklist
+
+- [x] **Dependency Injection**
+- [x] **Factory**
+- [x] **Strategy**
+- [x] **Command**
+- [ ] **State**
+- [ ] **Observer**
+- [ ] **Decorator**
