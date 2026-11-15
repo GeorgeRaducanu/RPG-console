@@ -19,6 +19,7 @@ public:
     void showClassSelected(const char* className) const;
     void showExplorationMenu() const;
     void showNoEnemy() const;
+    void showEnemyBlocksPath(const char* enemy) const;
     void showAttack(const char* enemy, int damage, int remainingHp) const;
     void showEnemyDefeated(const char* enemy) const;
     void showEnemyAttack(const char* enemy, int damage, int remainingHp) const;

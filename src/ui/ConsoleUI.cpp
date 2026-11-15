@@ -46,6 +46,11 @@ void ConsoleUI::showNoEnemy() const
     std::cout << "There is no enemy here." << '\n';
 }
 
+void ConsoleUI::showEnemyBlocksPath(const char* enemy) const
+{
+    std::cout << "The " << enemy << " blocks your way. Defeat it first." << '\n';
+}
+
 void ConsoleUI::showAttack(
     const char* enemy,
     const int damage,

@@ -34,8 +34,11 @@ private:
     const char* enemyName_ = nullptr;
     int enemyHp_ = 0;
     int enemyAttack_ = 0;
+    int enemyDefense_ = 0;
     int hp_ = 0;
     int maxHp_ = 0;
+    int atk_ = 0;
+    int def_ = 0;
     bool defeated_ = false;
     ConsoleUI ui_;
 };

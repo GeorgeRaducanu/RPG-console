@@ -2,6 +2,14 @@
 
 #include <algorithm>
 
+namespace
+{
+int calculateDamage(const int attack, const int defense)
+{
+    return std::max(1, attack - defense);
+}
+}
+
 int App::run()
 {
     ui_.showTitle();
@@ -85,14 +93,20 @@ bool App::chooseClass()
         case PlayerClass::Warrior:
             className = "Warrior";
             hp_ = maxHp_ = 120;
+            atk_ = 15;
+            def_ = 8;
             break;
         case PlayerClass::Mage:
             className = "Mage";
             hp_ = maxHp_ = 80;
+            atk_ = 8;
+            def_ = 3;
             break;
         case PlayerClass::Archer:
             className = "Archer";
             hp_ = maxHp_ = 95;
+            atk_ = 12;
+            def_ = 5;
             break;
         }
 
@@ -101,6 +115,7 @@ bool App::chooseClass()
         enemyName_ = nullptr;
         enemyHp_ = 0;
         enemyAttack_ = 0;
+        enemyDefense_ = 0;
         defeated_ = false;
         ui_.showClassSelected(className);
         return true;
@@ -168,6 +183,18 @@ bool App::runExploration()
 
 void App::advanceRoom()
 {
+    if (defeated_)
+    {
+        ui_.showPlayerDefeated();
+        return;
+    }
+
+    if (enemyName_ != nullptr && enemyHp_ > 0)
+    {
+        ui_.showEnemyBlocksPath(enemyName_);
+        return;
+    }
+
     if (room_ >= totalRooms_)
     {
         return;
@@ -184,6 +211,7 @@ void App::advanceRoom()
         enemyName_ = "Goblin";
         enemyHp_ = 40;
         enemyAttack_ = 5;
+        enemyDefense_ = 1;
         ui_.showEnemyAppeared("Goblin", 40);
         break;
     case 2:
@@ -197,6 +225,7 @@ void App::advanceRoom()
         enemyName_ = "Orc";
         enemyHp_ = 80;
         enemyAttack_ = 8;
+        enemyDefense_ = 2;
         ui_.showEnemyAppeared("Orc", 80);
         break;
     case 5:
@@ -214,6 +243,7 @@ void App::advanceRoom()
         enemyName_ = "Dragon";
         enemyHp_ = 120;
         enemyAttack_ = 12;
+        enemyDefense_ = 3;
         ui_.showEnemyAppeared("Dragon", 120);
         break;
     }
@@ -238,19 +268,7 @@ void App::attackEnemy()
         return;
     }
 
-    int damage = 0;
-    switch (playerClass_)
-    {
-    case PlayerClass::Warrior:
-        damage = 15;
-        break;
-    case PlayerClass::Mage:
-        damage = 10;
-        break;
-    case PlayerClass::Archer:
-        damage = 13;
-        break;
-    }
+    const int damage = calculateDamage(atk_, enemyDefense_);
 
     enemyHp_ -= damage;
     if (enemyHp_ < 0)
@@ -263,15 +281,17 @@ void App::attackEnemy()
         ui_.showEnemyDefeated(enemyName_);
         enemyName_ = nullptr;
         enemyAttack_ = 0;
+        enemyDefense_ = 0;
         return;
     }
 
-    hp_ -= enemyAttack_;
+    const int enemyDamage = calculateDamage(enemyAttack_, def_);
+    hp_ -= enemyDamage;
     if (hp_ < 0)
     {
         hp_ = 0;
     }
-    ui_.showEnemyAttack(enemyName_, enemyAttack_, hp_);
+    ui_.showEnemyAttack(enemyName_, enemyDamage, hp_);
     if (hp_ == 0)
     {
         defeated_ = true;
@@ -310,13 +330,13 @@ void App::showStatus() const
     switch (playerClass_)
     {
     case PlayerClass::Warrior:
-        ui_.showStatus("Warrior", hp_, 120, 10, 10, 15, 8, 0, 50);
+        ui_.showStatus("Warrior", hp_, 120, 10, 10, atk_, def_, 0, 50);
         break;
     case PlayerClass::Mage:
-        ui_.showStatus("Mage", hp_, 80, 50, 50, 8, 3, 0, 50);
+        ui_.showStatus("Mage", hp_, 80, 50, 50, atk_, def_, 0, 50);
         break;
     case PlayerClass::Archer:
-        ui_.showStatus("Archer", hp_, 95, 20, 20, 12, 5, 0, 50);
+        ui_.showStatus("Archer", hp_, 95, 20, 20, atk_, def_, 0, 50);
         break;
     }
 }
