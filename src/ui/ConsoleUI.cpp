@@ -35,9 +35,10 @@ void ConsoleUI::showExplorationMenu() const
     std::cout << "1) Advance" << '\n'
               << "2) Inventory" << '\n'
               << "3) Status" << '\n'
-    << "4) Quit" << '\n'
-    << "5) Attack" << '\n'
-    << "6) Use Item" << '\n'
+              << "4) Quit" << '\n'
+              << "5) Attack" << '\n'
+              << "6) Use Item" << '\n'
+              << "7) Flee" << '\n'
               << "Choose:" << '\n';
 }
 
@@ -76,9 +77,66 @@ void ConsoleUI::showPlayerDefeated() const
     std::cout << "You were defeated." << '\n';
 }
 
+void ConsoleUI::showFled(const char* enemy) const
+{
+    std::cout << "You flee from the " << enemy << "." << '\n';
+}
+
+void ConsoleUI::showCannotFlee(const char* enemy) const
+{
+    std::cout << "You cannot flee from the " << enemy << "!" << '\n';
+}
+
+void ConsoleUI::showXpGained(const int amount, const int xp, const int xpNeeded) const
+{
+    std::cout << "You gained " << amount << " XP. (XP " << xp << '/'
+              << xpNeeded << ")" << '\n';
+}
+
+void ConsoleUI::showLevelUp(
+    const int level,
+    const int maxHp,
+    const int attack,
+    const int defense) const
+{
+    std::cout << "Level up! You are now Lv " << level << ". (Max HP "
+              << maxHp << " | ATK " << attack << " | DEF " << defense << ")"
+              << '\n';
+}
+
+void ConsoleUI::showVictory() const
+{
+    std::cout << "=== VICTORY ===" << '\n'
+              << "The Dragon is slain. You escape the Dungeon of Echoes!"
+              << '\n';
+}
+
+void ConsoleUI::showGameOver() const
+{
+    std::cout << "=== GAME OVER ===" << '\n'
+              << "You were defeated. The dungeon claims another hero."
+              << '\n';
+}
+
+void ConsoleUI::showItemMenu(const std::vector<std::string>& items) const
+{
+    std::cout << "Use which item?" << '\n';
+    for (std::size_t i = 0; i < items.size(); ++i)
+    {
+        std::cout << i + 1 << ") " << items[i] << '\n';
+    }
+    std::cout << "0) Cancel" << '\n'
+              << "Choose:" << '\n';
+}
+
 void ConsoleUI::showNoItem(const char* item) const
 {
     std::cout << "You have no " << item << "." << '\n';
+}
+
+void ConsoleUI::showUnknownItem(const char* item) const
+{
+    std::cout << "You don't know how to use the " << item << "." << '\n';
 }
 
 void ConsoleUI::showItemAtFullHealth() const
@@ -90,6 +148,28 @@ void ConsoleUI::showItemUsed(const char* item, const int healed, const int hp) c
 {
     std::cout << "You used a " << item << " and restored " << healed
               << " HP. (HP " << hp << ")" << '\n';
+}
+
+void ConsoleUI::showSwordEquipped(const int bonus, const int attack) const
+{
+    std::cout << "You equip the Sword. ATK +" << bonus << " permanently. (ATK "
+              << attack << ")" << '\n';
+}
+
+void ConsoleUI::showElixirUsed(const int bonus, const int turns) const
+{
+    std::cout << "You drink the Elixir. ATK +" << bonus << " for the next "
+              << turns << " attacks." << '\n';
+}
+
+void ConsoleUI::showElixirAlreadyActive() const
+{
+    std::cout << "An Elixir is already active." << '\n';
+}
+
+void ConsoleUI::showElixirExpired() const
+{
+    std::cout << "The Elixir's effect fades." << '\n';
 }
 
 void ConsoleUI::showRoom(const int room) const
@@ -129,6 +209,7 @@ void ConsoleUI::showInventory(const std::vector<std::string>& items) const
 
 void ConsoleUI::showStatus(
     const char* playerClass,
+    const int level,
     const int hp,
     const int maxHp,
     const int mp,
@@ -136,13 +217,23 @@ void ConsoleUI::showStatus(
     const int attack,
     const int defense,
     const int xp,
-    const int xpNeeded) const
+    const int xpNeeded,
+    const int elixirTurns) const
 {
-    std::cout << "Hero (" << playerClass << ") Lv 1 | HP " << hp << '/'
-              << maxHp << " | MP " << mp << '/' << maxMp << " | ATK "
+    std::cout << "Hero (" << playerClass << ") Lv " << level << " | HP " << hp
+              << '/' << maxHp << " | MP " << mp << '/' << maxMp << " | ATK "
               << attack << " | DEF " << defense << " | XP " << xp << '/'
-              << xpNeeded << '\n'
-              << "Effects: none" << '\n';
+              << xpNeeded << '\n';
+
+    if (elixirTurns > 0)
+    {
+        std::cout << "Effects: Elixir (" << elixirTurns << " attacks left)"
+                  << '\n';
+    }
+    else
+    {
+        std::cout << "Effects: none" << '\n';
+    }
 }
 
 void ConsoleUI::showInvalidChoice() const

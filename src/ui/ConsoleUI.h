@@ -24,9 +24,21 @@ public:
     void showEnemyDefeated(const char* enemy) const;
     void showEnemyAttack(const char* enemy, int damage, int remainingHp) const;
     void showPlayerDefeated() const;
+    void showFled(const char* enemy) const;
+    void showCannotFlee(const char* enemy) const;
+    void showXpGained(int amount, int xp, int xpNeeded) const;
+    void showLevelUp(int level, int maxHp, int attack, int defense) const;
+    void showVictory() const;
+    void showGameOver() const;
+    void showItemMenu(const std::vector<std::string>& items) const;
     void showNoItem(const char* item) const;
+    void showUnknownItem(const char* item) const;
     void showItemAtFullHealth() const;
     void showItemUsed(const char* item, int healed, int hp) const;
+    void showSwordEquipped(int bonus, int attack) const;
+    void showElixirUsed(int bonus, int turns) const;
+    void showElixirAlreadyActive() const;
+    void showElixirExpired() const;
     void showRoom(int room) const;
     void showEnemyAppeared(const char* enemy, int hp) const;
     void showEmptyRoom() const;
@@ -34,6 +46,7 @@ public:
     void showInventory(const std::vector<std::string>& items) const;
     void showStatus(
         const char* playerClass,
+        int level,
         int hp,
         int maxHp,
         int mp,
@@ -41,7 +54,8 @@ public:
         int attack,
         int defense,
         int xp,
-        int xpNeeded) const;
+        int xpNeeded,
+        int elixirTurns) const;
     void showInvalidChoice() const;
     void showInputEnded() const;
     InputResult readChoice(int& choice) const;

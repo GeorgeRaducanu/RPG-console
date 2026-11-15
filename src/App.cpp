@@ -78,46 +78,35 @@ bool App::chooseClass()
         {
         case 1:
             playerClass_ = PlayerClass::Warrior;
-            break;
-        case 2:
-            playerClass_ = PlayerClass::Mage;
-            break;
-        case 3:
-            playerClass_ = PlayerClass::Archer;
-            break;
-        }
-
-        const char* className = "";
-        switch (playerClass_)
-        {
-        case PlayerClass::Warrior:
-            className = "Warrior";
             hp_ = maxHp_ = 120;
+            mp_ = maxMp_ = 10;
             atk_ = 15;
             def_ = 8;
             break;
-        case PlayerClass::Mage:
-            className = "Mage";
+        case 2:
+            playerClass_ = PlayerClass::Mage;
             hp_ = maxHp_ = 80;
+            mp_ = maxMp_ = 50;
             atk_ = 8;
             def_ = 3;
             break;
-        case PlayerClass::Archer:
-            className = "Archer";
+        case 3:
+            playerClass_ = PlayerClass::Archer;
             hp_ = maxHp_ = 95;
+            mp_ = maxMp_ = 20;
             atk_ = 12;
             def_ = 5;
             break;
         }
 
+        state_ = GameState::Playing;
         room_ = 0;
+        level_ = 1;
+        xp_ = 0;
+        elixirTurns_ = 0;
         inventory_.clear();
-        enemyName_ = nullptr;
-        enemyHp_ = 0;
-        enemyAttack_ = 0;
-        enemyDefense_ = 0;
-        defeated_ = false;
-        ui_.showClassSelected(className);
+        clearEnemy();
+        ui_.showClassSelected(className());
         return true;
     }
 }
@@ -126,6 +115,17 @@ bool App::runExploration()
 {
     while (true)
     {
+        if (state_ == GameState::Won)
+        {
+            ui_.showVictory();
+            return true;
+        }
+        if (state_ == GameState::Lost)
+        {
+            ui_.showGameOver();
+            return true;
+        }
+
         ui_.showExplorationMenu();
 
         int choice = 0;
@@ -142,53 +142,41 @@ bool App::runExploration()
             continue;
         }
 
-        if (choice == 4)
+        switch (choice)
         {
-            return true;
-        }
-
-        if (choice == 1)
-        {
+        case 1:
             advanceRoom();
-            continue;
-        }
-
-        if (choice == 2)
-        {
+            break;
+        case 2:
             showInventory();
-            continue;
-        }
-
-        if (choice == 3)
-        {
+            break;
+        case 3:
             showStatus();
-            continue;
-        }
-
-        if (choice == 5)
-        {
+            break;
+        case 4:
+            return true;
+        case 5:
             attackEnemy();
-            continue;
+            break;
+        case 6:
+            if (!useItem())
+            {
+                ui_.showInputEnded();
+                return false;
+            }
+            break;
+        case 7:
+            fleeEnemy();
+            break;
+        default:
+            ui_.showInvalidChoice();
+            break;
         }
-
-        if (choice == 6)
-        {
-            useItem();
-            continue;
-        }
-
-        ui_.showInvalidChoice();
     }
 }
 
 void App::advanceRoom()
 {
-    if (defeated_)
-    {
-        ui_.showPlayerDefeated();
-        return;
-    }
-
     if (enemyName_ != nullptr && enemyHp_ > 0)
     {
         ui_.showEnemyBlocksPath(enemyName_);
@@ -201,18 +189,13 @@ void App::advanceRoom()
     }
 
     ++room_;
-    enemyName_ = nullptr;
-    enemyHp_ = 0;
+    clearEnemy();
     ui_.showRoom(room_);
 
     switch (room_)
     {
     case 1:
-        enemyName_ = "Goblin";
-        enemyHp_ = 40;
-        enemyAttack_ = 5;
-        enemyDefense_ = 1;
-        ui_.showEnemyAppeared("Goblin", 40);
+        spawnEnemy("Goblin", 40, 5, 1, 20);
         break;
     case 2:
         ui_.showEmptyRoom();
@@ -222,31 +205,47 @@ void App::advanceRoom()
         ui_.showItemFound("Potion");
         break;
     case 4:
-        enemyName_ = "Orc";
-        enemyHp_ = 80;
-        enemyAttack_ = 8;
-        enemyDefense_ = 2;
-        ui_.showEnemyAppeared("Orc", 80);
+        spawnEnemy("Orc", 80, 8, 2, 35);
         break;
     case 5:
         inventory_.push_back("Sword");
         ui_.showItemFound("Sword");
         break;
     case 6:
-        ui_.showEmptyRoom();
+        spawnEnemy("Goblin", 40, 5, 1, 20);
         break;
     case 7:
         inventory_.push_back("Elixir");
         ui_.showItemFound("Elixir");
         break;
     case 8:
-        enemyName_ = "Dragon";
-        enemyHp_ = 120;
-        enemyAttack_ = 12;
-        enemyDefense_ = 3;
-        ui_.showEnemyAppeared("Dragon", 120);
+        spawnEnemy("Dragon", 120, 12, 3, 60);
         break;
     }
+}
+
+void App::spawnEnemy(
+    const char* name,
+    const int hp,
+    const int attack,
+    const int defense,
+    const int xp)
+{
+    enemyName_ = name;
+    enemyHp_ = hp;
+    enemyAttack_ = attack;
+    enemyDefense_ = defense;
+    enemyXp_ = xp;
+    ui_.showEnemyAppeared(name, hp);
+}
+
+void App::clearEnemy()
+{
+    enemyName_ = nullptr;
+    enemyHp_ = 0;
+    enemyAttack_ = 0;
+    enemyDefense_ = 0;
+    enemyXp_ = 0;
 }
 
 void App::showInventory() const
@@ -254,21 +253,20 @@ void App::showInventory() const
     ui_.showInventory(inventory_);
 }
 
+int App::currentAttack() const
+{
+    return elixirTurns_ > 0 ? atk_ + elixirAttackBonus_ : atk_;
+}
+
 void App::attackEnemy()
 {
-    if (defeated_)
-    {
-        ui_.showPlayerDefeated();
-        return;
-    }
-
     if (enemyName_ == nullptr || enemyHp_ <= 0)
     {
         ui_.showNoEnemy();
         return;
     }
 
-    const int damage = calculateDamage(atk_, enemyDefense_);
+    const int damage = calculateDamage(currentAttack(), enemyDefense_);
 
     enemyHp_ -= damage;
     if (enemyHp_ < 0)
@@ -276,12 +274,26 @@ void App::attackEnemy()
         enemyHp_ = 0;
     }
     ui_.showAttack(enemyName_, damage, enemyHp_);
+
+    if (elixirTurns_ > 0)
+    {
+        --elixirTurns_;
+        if (elixirTurns_ == 0)
+        {
+            ui_.showElixirExpired();
+        }
+    }
+
     if (enemyHp_ <= 0)
     {
         ui_.showEnemyDefeated(enemyName_);
-        enemyName_ = nullptr;
-        enemyAttack_ = 0;
-        enemyDefense_ = 0;
+        const bool wasFinalBoss = room_ == totalRooms_;
+        gainXp(enemyXp_);
+        clearEnemy();
+        if (wasFinalBoss)
+        {
+            state_ = GameState::Won;
+        }
         return;
     }
 
@@ -294,49 +306,157 @@ void App::attackEnemy()
     ui_.showEnemyAttack(enemyName_, enemyDamage, hp_);
     if (hp_ == 0)
     {
-        defeated_ = true;
-        ui_.showPlayerDefeated();
+        state_ = GameState::Lost;
     }
 }
 
-void App::useItem()
+void App::fleeEnemy()
 {
-    if (defeated_)
+    if (enemyName_ == nullptr || enemyHp_ <= 0)
     {
-        ui_.showPlayerDefeated();
+        ui_.showNoEnemy();
         return;
     }
 
-    auto potion = std::find(inventory_.begin(), inventory_.end(), "Potion");
-    if (potion == inventory_.end())
+    if (room_ == totalRooms_)
     {
-        ui_.showNoItem("Potion");
-        return;
-    }
-    if (hp_ == maxHp_)
-    {
-        ui_.showItemAtFullHealth();
+        ui_.showCannotFlee(enemyName_);
         return;
     }
 
-    const int oldHp = hp_;
-    hp_ = std::min(maxHp_, hp_ + 30);
-    inventory_.erase(potion);
-    ui_.showItemUsed("Potion", hp_ - oldHp, hp_);
+    ui_.showFled(enemyName_);
+    clearEnemy();
 }
 
-void App::showStatus() const
+void App::gainXp(const int amount)
+{
+    xp_ += amount;
+    ui_.showXpGained(amount, xp_, xpNeeded());
+
+    while (xp_ >= xpNeeded())
+    {
+        xp_ -= xpNeeded();
+        ++level_;
+        maxHp_ += 10;
+        hp_ = std::min(maxHp_, hp_ + 10);
+        atk_ += 2;
+        def_ += 1;
+        ui_.showLevelUp(level_, maxHp_, atk_, def_);
+    }
+}
+
+int App::xpNeeded() const
+{
+    return baseXpNeeded_ * level_;
+}
+
+bool App::useItem()
+{
+    if (inventory_.empty())
+    {
+        ui_.showInventory(inventory_);
+        return true;
+    }
+
+    ui_.showItemMenu(inventory_);
+
+    int choice = 0;
+    const ConsoleUI::InputResult result = ui_.readChoice(choice);
+    if (result == ConsoleUI::InputResult::EndOfInput)
+    {
+        return false;
+    }
+
+    if (result == ConsoleUI::InputResult::Invalid ||
+        choice < 0 || choice > static_cast<int>(inventory_.size()))
+    {
+        ui_.showInvalidChoice();
+        return true;
+    }
+
+    if (choice == 0)
+    {
+        return true;
+    }
+
+    const std::string item = inventory_[static_cast<std::size_t>(choice - 1)];
+    useItemByName(item);
+    return true;
+}
+
+void App::useItemByName(const std::string& item)
+{
+    const auto it = std::find(inventory_.begin(), inventory_.end(), item);
+    if (it == inventory_.end())
+    {
+        ui_.showNoItem(item.c_str());
+        return;
+    }
+
+    if (item == "Potion")
+    {
+        if (hp_ == maxHp_)
+        {
+            ui_.showItemAtFullHealth();
+            return;
+        }
+        const int oldHp = hp_;
+        hp_ = std::min(maxHp_, hp_ + potionHeal_);
+        inventory_.erase(it);
+        ui_.showItemUsed("Potion", hp_ - oldHp, hp_);
+        return;
+    }
+
+    if (item == "Sword")
+    {
+        atk_ += swordAttackBonus_;
+        inventory_.erase(it);
+        ui_.showSwordEquipped(swordAttackBonus_, atk_);
+        return;
+    }
+
+    if (item == "Elixir")
+    {
+        if (elixirTurns_ > 0)
+        {
+            ui_.showElixirAlreadyActive();
+            return;
+        }
+        elixirTurns_ = elixirDuration_;
+        inventory_.erase(it);
+        ui_.showElixirUsed(elixirAttackBonus_, elixirDuration_);
+        return;
+    }
+
+    ui_.showUnknownItem(item.c_str());
+}
+
+const char* App::className() const
 {
     switch (playerClass_)
     {
     case PlayerClass::Warrior:
-        ui_.showStatus("Warrior", hp_, 120, 10, 10, atk_, def_, 0, 50);
-        break;
+        return "Warrior";
     case PlayerClass::Mage:
-        ui_.showStatus("Mage", hp_, 80, 50, 50, atk_, def_, 0, 50);
-        break;
+        return "Mage";
     case PlayerClass::Archer:
-        ui_.showStatus("Archer", hp_, 95, 20, 20, atk_, def_, 0, 50);
-        break;
+        return "Archer";
     }
+    return "";
+}
+
+void App::showStatus() const
+{
+    ui_.showStatus(
+        className(),
+        level_,
+        hp_,
+        maxHp_,
+        mp_,
+        maxMp_,
+        currentAttack(),
+        def_,
+        xp_,
+        xpNeeded(),
+        elixirTurns_);
 }
